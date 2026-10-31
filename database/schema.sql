@@ -1,0 +1,1 @@
+-- TODO(LR3): создайте equipment, tickets и ticket_events по шагам методички.

@@ -1,0 +1,28 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">СПРАВОЧНИК</p>
+    <h1>Оборудование</h1>
+    <p class="muted">Техника, которую обслуживает ИТ-отдел.</p>
+  </div>
+</div>
+@if (loading()) {
+  <p class="state" role="status">Загружаем оборудование…</p>
+} @else if (error()) {
+  <div class="state error" role="alert">
+    {{ error() }} <button (click)="load()">Повторить</button>
+  </div>
+} @else {
+  <div class="equipment-grid">
+    @for (item of items(); track item.id) {
+      <article class="panel equipment-card">
+        <span class="device-icon">▣</span>
+        <p class="eyebrow">{{ item.inventoryNumber }}</p>
+        <h2>{{ item.name }}</h2>
+        <p class="muted">{{ item.location }}</p>
+        <span class="muted">ID {{ item.id }}</span>
+      </article>
+    } @empty {
+      <p class="state">Справочник оборудования пуст.</p>
+    }
+  </div>
+}

@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "ЛР1: Angular в Chrome (сначала npm start)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4200/tickets",
+      "webRoot": "${workspaceFolder}/frontend",
+      "sourceMaps": true
+    },
+    {
+      "name": "ЛР2: Flask",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "flask",
+      "cwd": "${workspaceFolder}/backend",
+      "args": ["--app", "app:create_app", "run", "--no-debugger", "--no-reload", "--port", "5000"],
+      "jinja": true
+    }
+  ]
+}

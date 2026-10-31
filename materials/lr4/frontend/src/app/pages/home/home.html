@@ -1,0 +1,65 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">ИТ-ОТДЕЛ / ОБЗОР</p>
+    <h1>Инфраструктура под контролем</h1>
+    <p class="muted">Заявки, оборудование и текущая работа команды.</p>
+  </div>
+  <a class="button primary" routerLink="/tickets/new">+ Создать заявку</a>
+</div>
+@if (loading()) {
+  <p class="state" role="status">Загружаем обзор…</p>
+} @else if (error()) {
+  <div class="state error" role="alert">
+    {{ error() }} <button (click)="load()">Повторить</button>
+  </div>
+} @else {
+  @if (stats(); as data) {
+    <div class="stats-grid">
+      <div class="stat">
+        <span>Всего заявок</span><strong>{{ data.total }}</strong
+        ><small>За всё время</small>
+      </div>
+      <div class="stat blue">
+        <span>Новые</span><strong>{{ data.byStatus.new }}</strong
+        ><small>Ожидают обработки</small>
+      </div>
+      <div class="stat amber">
+        <span>В работе</span><strong>{{ data.byStatus.in_progress }}</strong
+        ><small>Занимаемся решением</small>
+      </div>
+      <div class="stat green">
+        <span>Закрыты</span><strong>{{ data.byStatus.closed }}</strong
+        ><small>Обслуживание завершено</small>
+      </div>
+    </div>
+  }
+  <section class="panel">
+    <div class="panel-heading">
+      <div>
+        <h2>Требуют внимания</h2>
+        <p class="muted">Последние незакрытые обращения</p>
+      </div>
+      <a routerLink="/tickets">Все заявки →</a>
+    </div>
+    @for (ticket of recent(); track ticket.id) {
+      <a class="recent-row" [routerLink]="['/tickets', ticket.id]"
+        ><span class="ticket-number">#{{ ticket.id }}</span>
+        <div>
+          <strong>{{ ticket.title }}</strong
+          ><small>{{ ticket.equipmentName }}</small>
+        </div>
+        <span class="badge" [attr.data-status]="ticket.status">{{ labels[ticket.status] }}</span
+        ><span>→</span></a
+      >
+    } @empty {
+      <p class="state">Незакрытых заявок нет. Всё в порядке.</p>
+    }
+  </section>
+  <div class="callout">
+    <div>
+      <h2>Оборудование учебного центра</h2>
+      <p>Инвентарные номера и расположение техники в одном справочнике.</p>
+    </div>
+    <a class="button" routerLink="/equipment">Открыть справочник →</a>
+  </div>
+}

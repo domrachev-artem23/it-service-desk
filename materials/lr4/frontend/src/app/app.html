@@ -1,0 +1,31 @@
+<aside class="sidebar">
+  <a class="brand" routerLink="/home"
+    ><span class="brand-mark">IT</span><span>Сервис заявок<small>Учебный центр</small></span></a
+  >
+  <p class="nav-label">РАБОЧЕЕ ПРОСТРАНСТВО</p>
+  <nav aria-label="Основная навигация">
+    <a routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page"
+      ><span>◫</span> Обзор</a
+    >
+    <a routerLink="/tickets" routerLinkActive="active" ariaCurrentWhenActive="page"
+      ><span>▤</span> Заявки</a
+    >
+    <a routerLink="/equipment" routerLinkActive="active" ariaCurrentWhenActive="page"
+      ><span>▣</span> Оборудование</a
+    >
+    <a routerLink="/about" routerLinkActive="active" ariaCurrentWhenActive="page"
+      ><span>ⓘ</span> О системе</a
+    >
+  </nav>
+  <div class="sidebar-foot">
+    <span class="avatar">ИТ</span>
+    <div>ИТ-отдел<small>Обслуживание инфраструктуры</small></div>
+  </div>
+</aside>
+<div class="workspace">
+  <header class="topbar">
+    <span>Информационные системы и технологии</span><span class="environment">Учебный проект</span>
+  </header>
+  <main id="main"><router-outlet /></main>
+  <footer>Сервис заявок · Angular / Flask / MySQL</footer>
+</div>

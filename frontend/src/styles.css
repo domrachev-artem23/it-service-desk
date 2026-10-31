@@ -1,0 +1,26 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #172033;
+  background: #f4f6fa;
+}
+header, main { max-width: 960px; margin: auto; padding: 24px; }
+nav { display: flex; flex-wrap: wrap; gap: 16px; }
+a { color: #174ea6; }
+a.active { font-weight: bold; text-decoration-thickness: 3px; }
+button {
+  padding: 10px 16px;
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #174ea6;
+  border-radius: 6px;
+  color: #123665;
+  background: white;
+}
+button[aria-pressed="true"] { color: white; background: #174ea6; }
+a:focus-visible, button:focus-visible {
+  outline: 3px solid #8a4b00;
+  outline-offset: 3px;
+}

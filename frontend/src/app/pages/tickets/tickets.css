@@ -1,0 +1,15 @@
+.ticket-list {
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 16px;
+}
+
+.ticket {
+  padding: 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: white;
+}
+
+.ticket h3 { margin-top: 0; }

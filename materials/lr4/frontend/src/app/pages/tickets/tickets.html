@@ -1,0 +1,92 @@
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">РАБОЧЕЕ ПРОСТРАНСТВО</p>
+    <h1>Заявки на обслуживание</h1>
+    <p class="muted">От первого обращения до решения проблемы.</p>
+  </div>
+  <a class="button primary" routerLink="/tickets/new">+ Создать заявку</a>
+</div>
+<section class="panel">
+  <div class="toolbar">
+    <div class="filters" aria-label="Статус заявок">
+      @for (item of filters; track item.id) {
+        <button
+          type="button"
+          [attr.data-testid]="'filter-' + item.id"
+          [attr.aria-pressed]="mode() === item.id"
+          (click)="setFilter(item.id)"
+        >
+          {{ item.label }}
+        </button>
+      }
+    </div>
+    <form class="search" (ngSubmit)="load()">
+      <label class="sr-only" for="search">Поиск по заголовку</label
+      ><input
+        id="search"
+        name="q"
+        [(ngModel)]="query"
+        placeholder="Поиск по заголовку…"
+        maxlength="120"
+      /><button type="submit">Найти</button>
+    </form>
+  </div>
+  @if (loading()) {
+    <p class="state" role="status">Загружаем заявки…</p>
+  } @else if (error()) {
+    <div class="state error" role="alert">
+      {{ error() }} <button (click)="load()">Повторить</button>
+    </div>
+  } @else {
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Заявка</th>
+            <th>Оборудование</th>
+            <th>Статус</th>
+            <th>Создана</th>
+            <th><span class="sr-only">Открыть</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (ticket of tickets(); track ticket.id) {
+            <tr data-testid="ticket-row" [attr.data-ticket-id]="ticket.id">
+              <td>
+                <span class="ticket-number">#{{ ticket.id }}</span
+                ><a class="ticket-title" [routerLink]="['/tickets', ticket.id]">{{
+                  ticket.title
+                }}</a>
+              </td>
+              <td>
+                {{ ticket.equipmentName }}<small>{{ ticket.inventoryNumber }}</small>
+              </td>
+              <td>
+                <span class="badge" [attr.data-status]="ticket.status">{{
+                  labels[ticket.status]
+                }}</span>
+              </td>
+              <td class="nowrap">{{ ticket.createdAt | date: 'dd.MM.yyyy' }}</td>
+              <td>
+                <a
+                  [routerLink]="['/tickets', ticket.id]"
+                  [attr.aria-label]="'Открыть заявку ' + ticket.id"
+                  >→</a
+                >
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="state" data-testid="empty-state">
+                По выбранному условию заявок нет.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="table-footer" data-testid="ticket-count">
+      Найдено заявок: {{ tickets().length }}
+    </div>
+  }
+</section>

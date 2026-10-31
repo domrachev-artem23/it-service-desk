@@ -1,0 +1,45 @@
+<h2>Заявки на обслуживание</h2>
+
+<!-- Поле поиска (логичнее разместить сверху) -->
+<label class="search-box">
+  Поиск по заголовку:
+  <input type="text" data-testid="search"
+         [value]="search()"
+         (input)="setSearch($any($event.target).value)" />
+</label>
+
+<!-- Блок фильтров -->
+<div class="filters">
+  <!-- Убрали "mode:" из вызовов функции -->
+  <button type="button" data-testid="filter-all"
+          [attr.aria-pressed]="filter() === 'all'"
+          (click)="setFilter('all')">Все</button>
+
+  <button type="button" data-testid="filter-open"
+          [attr.aria-pressed]="filter() === 'open'"
+          (click)="setFilter('open')">Незакрытые</button>
+
+  <button type="button" data-testid="filter-new"
+          [attr.aria-pressed]="filter() === 'new'"
+          (click)="setFilter('new')">Только новые</button>
+</div>
+
+<!-- Счётчик -->
+<p>Найдено: <span data-testid="ticket-count">{{ visibleTickets().length }}</span></p>
+
+<!-- Список карточек -->
+<ul class="tickets">
+  @for (ticket of visibleTickets(); track ticket.id) {
+    <li class="ticket"
+        data-testid="ticket-card"
+        [attr.data-ticket-id]="ticket.id">
+      <h3>{{ ticket.title }}</h3>
+      <p>{{ ticket.description }}</p>
+      <p>Заявка №{{ ticket.id }}</p>
+      <p>Оборудование: {{ ticket.equipmentId }}</p>
+      <p>Статус: {{ statusLabels[ticket.status] }}</p>
+    </li>
+  } @empty {
+    <li data-testid="empty-state">По выбранному условию заявок нет.</li>
+  }
+</ul>
