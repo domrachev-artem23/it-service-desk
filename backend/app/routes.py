@@ -26,32 +26,29 @@ def stats():
 
 @api.get("/tickets")
 def tickets():
-    # TODO(LR2): реализуйте tickets по методичке.
-    raise ApiError("NOT_IMPLEMENTED", "Этот шаг лабораторной работы ещё не выполнен.", 501)
+    return repo().list(**ticket_query(request.args))
 
 
 @api.get("/tickets/<int:ticket_id>")
 def ticket(ticket_id):
-    # TODO(LR2): реализуйте ticket по методичке.
-    raise ApiError("NOT_IMPLEMENTED", "Этот шаг лабораторной работы ещё не выполнен.", 501)
+    return repo().get(ticket_id)
 
 
 @api.post("/tickets")
 def create_ticket():
-    # TODO(LR2): реализуйте create_ticket по методичке.
-    raise ApiError("NOT_IMPLEMENTED", "Этот шаг лабораторной работы ещё не выполнен.", 501)
+    result = repo().create(ticket_payload(request.get_json()))
+    return result, 201, {"Location": url_for("api.ticket", ticket_id=result["id"])}
 
 
 @api.patch("/tickets/<int:ticket_id>")
 def update_ticket(ticket_id):
-    # TODO(LR2): реализуйте update_ticket по методичке.
-    raise ApiError("NOT_IMPLEMENTED", "Этот шаг лабораторной работы ещё не выполнен.", 501)
+    return repo().update(ticket_id, ticket_payload(request.get_json(), partial=True))
 
 
 @api.delete("/tickets/<int:ticket_id>")
 def delete_ticket(ticket_id):
-    # TODO(LR2): реализуйте delete_ticket по методичке.
-    raise ApiError("NOT_IMPLEMENTED", "Этот шаг лабораторной работы ещё не выполнен.", 501)
+    repo().delete(ticket_id)
+    return "", 204
 
 
 @api.get("/tickets/<int:ticket_id>/events")

@@ -58,24 +58,41 @@ class MemoryRepository:
                              "action":action,"message":message,"createdAt":now()})
 
     def list(self, status="", scope="all", q=""):
-        # TODO(LR2): реализуйте list по методичке.
-        raise ApiError("NOT_IMPLEMENTED", "Этот шаг лабораторной работы ещё не выполнен.", 501)
+        result = self.items
+        if status:
+            result = [item for item in result if item["status"] == status]
+        if scope == "open":
+            result = [item for item in result if item["status"] != "closed"]
+        if q:
+            result = [item for item in result if q.casefold() in item["title"].casefold()]
+        return [self._decorate(item) for item in reversed(result)]
 
     def get(self, ticket_id):
-        # TODO(LR2): реализуйте get по методичке.
-        raise ApiError("NOT_IMPLEMENTED", "Этот шаг лабораторной работы ещё не выполнен.", 501)
+        return self._decorate(self._item(ticket_id))
 
     def create(self, values):
-        # TODO(LR2): реализуйте create по методичке.
-        raise ApiError("NOT_IMPLEMENTED", "Этот шаг лабораторной работы ещё не выполнен.", 501)
+        self._device(values["equipmentId"])
+        timestamp = now()
+        item = {**values, "id": self.next_id, "status": "new",
+                "createdAt": timestamp, "updatedAt": timestamp}
+        self.next_id += 1
+        self.items.append(item)
+        self._record(item["id"], "created", "Заявка зарегистрирована")
+        return self._decorate(item)
 
     def update(self, ticket_id, values):
-        # TODO(LR2): реализуйте update по методичке.
-        raise ApiError("NOT_IMPLEMENTED", "Этот шаг лабораторной работы ещё не выполнен.", 501)
+        item = self._item(ticket_id)
+        if "equipmentId" in values:
+            self._device(values["equipmentId"])
+        item.update(values)
+        item["updatedAt"] = now()
+        self._record(ticket_id, "updated", "Обновлена заявка")
+        return self._decorate(item)
 
     def delete(self, ticket_id):
-        # TODO(LR2): реализуйте delete по методичке.
-        raise ApiError("NOT_IMPLEMENTED", "Этот шаг лабораторной работы ещё не выполнен.", 501)
+        item = self._item(ticket_id)
+        self.items.remove(item)
+        self.history = [event for event in self.history if event["ticketId"] != ticket_id]
 
     def events(self, ticket_id):
         self._item(ticket_id)
