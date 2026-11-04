@@ -1,0 +1,66 @@
+<a class="back-link" [routerLink]="id ? ['/tickets', id] : ['/tickets']">← Назад к заявкам</a>
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">{{ id ? 'ИЗМЕНЕНИЕ ЗАЯВКИ' : 'НОВОЕ ОБРАЩЕНИЕ' }}</p>
+    <h1>{{ id ? 'Редактировать заявку' : 'Создать заявку' }}</h1>
+    <p class="muted">Опишите проблему и укажите оборудование.</p>
+  </div>
+</div>
+@if (loading()) {
+  <p class="state" role="status">Загружаем форму…</p>
+} @else if (loadError()) {
+  <div class="state error" role="alert">
+    {{ loadError() }} <button (click)="load()">Повторить</button>
+  </div>
+} @else {
+  <form class="panel form-panel" [formGroup]="form" (ngSubmit)="save()">
+    <label for="title">Название заявки <span class="required" aria-hidden="true">*</span></label
+    ><input
+      id="title"
+      aria-required="true"
+      formControlName="title"
+      maxlength="120"
+      placeholder="Например, не включается компьютер"
+      aria-describedby="title-help"
+    />
+    <small id="title-help">От 3 до 120 символов.</small>
+    @if (form.controls.title.touched && form.controls.title.invalid) {
+      <p class="field-error" role="alert">Введите название длиной от 3 до 120 символов.</p>
+    }
+    <label for="equipment">Оборудование <span class="required" aria-hidden="true">*</span></label
+    ><select id="equipment" aria-required="true" formControlName="equipmentId">
+      <option [ngValue]="0">Выберите оборудование</option>
+      @for (item of equipment(); track item.id) {
+        <option [ngValue]="item.id">{{ item.inventoryNumber }} · {{ item.name }}</option>
+      }
+    </select>
+    @if (form.controls.equipmentId.touched && form.controls.equipmentId.invalid) {
+      <p class="field-error" role="alert">Выберите оборудование.</p>
+    }
+    <label for="description">Описание проблемы</label
+    ><textarea
+      id="description"
+      formControlName="description"
+      rows="6"
+      maxlength="2000"
+      placeholder="Что произошло? Что уже пробовали сделать?"
+    ></textarea
+    ><small>До 2000 символов. Не указывайте пароли и личные данные.</small>
+    @if (id) {
+      <label for="status">Статус</label
+      ><select id="status" formControlName="status">
+        <option value="new">Новая</option>
+        <option value="in_progress">В работе</option>
+        <option value="closed">Закрыта</option>
+      </select>
+    }
+    @if (error()) {
+      <p class="error state" role="alert">{{ error() }}</p>
+    }
+    <div class="form-actions">
+      <button class="primary" type="submit" [disabled]="saving()">
+        {{ saving() ? 'Сохраняем…' : 'Сохранить заявку' }}</button
+      ><a class="button" [routerLink]="id ? ['/tickets', id] : ['/tickets']">Отмена</a>
+    </div>
+  </form>
+}

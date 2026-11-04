@@ -1,0 +1,66 @@
+<a class="back-link" routerLink="/tickets">← Все заявки</a>
+@if (loading()) {
+  <p class="state" role="status">Загружаем заявку…</p>
+} @else if (error()) {
+  <div class="state error" role="alert">
+    {{ error() }} <button (click)="load()">Повторить</button>
+  </div>
+} @else if (ticket(); as item) {
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">ЗАЯВКА #{{ item.id }}</p>
+      <h1>{{ item.title }}</h1>
+      <span class="badge" [attr.data-status]="item.status">{{ labels[item.status] }}</span>
+    </div>
+    <a class="button primary" [routerLink]="['/tickets', id, 'edit']">Редактировать</a>
+  </div>
+  <div class="detail-grid">
+    <section class="panel detail-panel">
+      <h2>Описание</h2>
+      <p class="description">{{ item.description || 'Описание не указано.' }}</p>
+      <dl>
+        <dt>Оборудование</dt>
+        <dd>{{ item.equipmentName }}</dd>
+        <dt>Инвентарный номер</dt>
+        <dd>{{ item.inventoryNumber }}</dd>
+        <dt>Создана</dt>
+        <dd>{{ item.createdAt | date: 'dd.MM.yyyy, HH:mm' }}</dd>
+        <dt>Обновлена</dt>
+        <dd>{{ item.updatedAt | date: 'dd.MM.yyyy, HH:mm' }}</dd>
+      </dl>
+    </section>
+    <section class="panel detail-panel">
+      <h2>История изменений</h2>
+      <ol class="timeline">
+        @for (event of events(); track event.id) {
+          <li>
+            <p>{{ event.message }}</p>
+            <small>{{ event.createdAt | date: 'dd.MM.yyyy, HH:mm' }}</small>
+          </li>
+        }
+      </ol>
+    </section>
+  </div>
+  <section class="danger-zone">
+    <div>
+      <h2>Удаление заявки</h2>
+      <p class="muted">
+        Удаляйте только ошибочно созданные обращения. Завершённую работу можно закрыть через статус.
+      </p>
+    </div>
+    @if (!confirmDelete()) {
+      <button class="danger" (click)="confirmDelete.set(true)">Удалить заявку</button>
+    } @else {
+      <div role="alert">
+        <p>Удалить заявку #{{ id }} и её историю? Это действие нельзя отменить.</p>
+        <button class="danger" [disabled]="deleting()" (click)="remove()">
+          {{ deleting() ? 'Удаляем…' : 'Подтвердить удаление' }}
+        </button>
+        <button [disabled]="deleting()" (click)="confirmDelete.set(false)">Отмена</button>
+      </div>
+    }
+    @if (deleteError()) {
+      <p class="field-error" role="alert">{{ deleteError() }}</p>
+    }
+  </section>
+}

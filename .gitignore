@@ -1,18 +1,26 @@
-node_modules/
-dist/
-.angular/
-.venv/
+# Python
+backend/.venv/
+backend/venv/
 __pycache__/
-.pytest_cache/
-.mypy_cache/
-.coverage
-htmlcov/
-.env
-.env.*
-!.env.example
-.DS_Store
-*.log
+*.pyc
 
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Окружение и секреты
+backend/.env
+.env
+*.env
+
+# Резервные копии курса
 .course-backups/
-playwright-report/
-test-results/
+
+# Базы данных (если есть локальные файлы)
+*.sqlite
+*.db
+
+# Логи и системные файлы
+*.log
+.DS_Store
+Thumbs.db
